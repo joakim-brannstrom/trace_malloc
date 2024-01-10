@@ -23,10 +23,13 @@ def _major_formatter(x, pos):
     return format_bytes(x)     
 
 class Application(tkinter.Frame):    
+    __canvasAxesBarX = []
+    __detailIndex = 0
+
     def __init__(self, master = None):
         tkinter.Frame.__init__(self, master)   
         self.master.title('tracing malloc')    
-        self.master.state("zoomed")
+        self.master.attributes('-zoomed', True)
         self.__createWidgets()
         self.__cmdDispatcher = {}
 
@@ -55,7 +58,7 @@ class Application(tkinter.Frame):
         ftypes = [('Trace stack files', '*.addr2line'), ('All files', '*')]
         dlg = filedialog.Open(self, filetypes = ftypes)
         path = dlg.show()
-        if path :
+        if path:
             self.__onCommand('Open', FilePath = path)
 
     def __createStatusBar(self):

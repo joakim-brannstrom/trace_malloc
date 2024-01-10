@@ -87,15 +87,15 @@ cleanup:
 
 static int _record_debug(struct hashmap_value *hashmap_value)
 {
-	printf("ptr:%p, size:%lld\n", (void *)hashmap_value->pointer,
+	printf("ptr:%p, size:%ld\n", (void *)hashmap_value->pointer,
 	       hashmap_value->alloc_size);
 	return 0;
 }
 
 __attribute__((always_inline)) static inline void _record_uninit()
 {
-	/* 
-    hashmap_traverse(g_record.hashmap, _record_debug); 
+	/*
+    hashmap_traverse(g_record.hashmap, _record_debug);
     */
 	_backup_proc_maps();
 	hashmap_destory(g_record.hashmap);

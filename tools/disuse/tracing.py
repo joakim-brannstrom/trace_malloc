@@ -1,8 +1,12 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #coding: utf-8
 
 import sys, os, re, subprocess, threading, datetime, time, shutil
 import addr2line
+
+def getXdgRuntimeDir():
+    import os
+    return os.environ["XDG_RUNTIME_DIR"]
 
 def copy_file(src_file, dst_file):
    while True:
@@ -12,8 +16,9 @@ def copy_file(src_file, dst_file):
     dst_file.write(data)
 
 def start_process(lib_tracing_malloc_path, prog_args):
-    args = 'LD_PRELOAD={0} {1}'.format(lib_tracing_malloc_path, ' '.join(map(str, prog_args)))
-    popen = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+    # args = 'LD_PRELOAD={0} {1}'.format(lib_tracing_malloc_path, ' '.join(map(str, prog_args)))
+    env = {"LD_PRELOAD": lib_tracing_malloc_path}
+    popen = subprocess.Popen(prog_args, env=env, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=False)
     trd = threading.Thread(target=copy_file, args=(popen.stdout, sys.stdout))
     trd.daemon=True
     trd.start()

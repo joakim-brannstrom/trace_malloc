@@ -25,13 +25,14 @@ target_link_libraries(${PROJ_NAME} dl)
 target_link_libraries(${PROJ_NAME} pthread)
 
 if(USE_LIBUNWIND) 
-    target_link_libraries(${PROJ_NAME} unwind.a)
+    set_property(TARGET ${PROJ_NAME} APPEND_STRING PROPERTY LINK_FLAGS "-L${CMAKE_SOURCE_DIR}/../libunwind_install/lib")
+    target_link_libraries(${PROJ_NAME} unwind)
 endif(USE_LIBUNWIND)
 
 add_custom_command(
     TARGET ${PROJ_NAME}
     PRE_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/../tools/tracing.py ${CMAKE_BINARY_DIR}
+    COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/../tools/disuse/tracing.py ${CMAKE_BINARY_DIR}
     COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/../tools/addr2line.py ${CMAKE_BINARY_DIR}
 )
 
